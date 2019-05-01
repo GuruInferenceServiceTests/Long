@@ -19,6 +19,7 @@ import ghidra.app.decompiler.*;
 import ghidra.app.decompiler.component.DecompilerController;
 import ghidra.app.decompiler.component.DecompilerPanel;
 import ghidra.app.plugin.core.decompile.DecompilerActionContext;
+import ghidra.app.util.AddEditDialog;
 import ghidra.framework.plugintool.PluginTool;
 import ghidra.program.model.address.Address;
 import ghidra.program.model.address.AddressSpace;
@@ -90,8 +91,14 @@ public class RenameVariableAction extends DockingAction {
 				return false;
 			}
 			variable = forgeHighVariable(storageAddress, controller);
-			if (variable == null)
+			if (variable == null && controller.getProgram().getListing().getFunctionAt(storageAddress) != null) {
+				// it is possible for function to be used as variable (function pointer)
+				// take it as a special case, as it cannot be simply forged as a "HighFunction"
+				// and we won't need anything from "HighFunction" anyway..
+				return true;
+			} else if (variable == null) {
 				return false;
+			}
 		}
 		if (variable instanceof HighLocal) {
 			getPopupMenuData().setMenuItemName("Rename Variable");
@@ -155,6 +162,7 @@ public class RenameVariableAction extends DockingAction {
 		else {
 			Data data = program.getListing().getDataAt(addr);
 			if (data != null) {
+				// address refers to data
 				DataType dt = data.getDataType();
 				try {
 					res =
@@ -189,8 +197,19 @@ public class RenameVariableAction extends DockingAction {
 			if (tokenAtCursor instanceof ClangVariableToken) {
 				Address addr = getStorageAddress(tokenAtCursor, controller);
 				variable = forgeHighVariable(addr, controller);
+				
+				if (variable == null) {
+					// special case for global function pointer
+					Function function = controller.getProgram().getListing().getFunctionAt(addr);
+					if (function != null) {
+						AddEditDialog dialog = new AddEditDialog("Edit Name", tool);
+						dialog.editLabel(function.getSymbol(), controller.getProgram());
+					}
+					return;
+				}
 			}
 		}
+		
 // TODO: Constant equates do not work properly with decompiler
 //		if (variable instanceof HighConstant) {
 //			nameTask =

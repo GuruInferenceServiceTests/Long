@@ -54,7 +54,8 @@ public class HighFunction extends PcodeSyntaxTree {
 
 	/**
 	 * @param function  function associated with the higher level function abstraction.
-	 * @param langParser language parser used to disassemble/get info on the language
+	 * @param language language   
+	 * @param compilerSpec compiler spec   
 	 * @param dtManager data type manager
 	 * @param showNamespace true signals to print function names with their namespace
 	 */
@@ -308,7 +309,7 @@ public class HighFunction extends PcodeSyntaxTree {
 	/**
 	 * Read in the Jump Table list for this function from an XML rep
 	 *
-	 * @param el
+	 * @param parser xml pull parser
 	 * @throws PcodeXMLException
 	 */
 	private void readJumpTableListXML(XmlPullParser parser) throws PcodeXMLException {

@@ -88,7 +88,7 @@ public class DecompilerController {
 	 * Shows the function containing the given location in the decompilerPanel.  Also, positions the
 	 * decompilerPanel's cursor to the closest equivalent position. If the decompilerPanel is
 	 * already displaying the function, then only the cursor is repositioned.  To force a
-	 * re-decompile use {@link #refreshDisplay(Program, ProgramLocation)}.
+	 * re-decompile use {@link #refreshDisplay(Program, ProgramLocation, File)}.
 	 *
 	 * @param program the program for the given location
 	 * @param location the location containing the function to be displayed and the location in
@@ -190,6 +190,7 @@ public class DecompilerController {
 	 * decompilerPanel's cursor to the closest equivalent position.
 	 * @param program the program for the given location
 	 * @param location the location containing the function to be displayed and the location in
+	 * @param debugFile debug file   
 	 * that function to position the cursor.
 	 */
 	public void refreshDisplay(Program program, ProgramLocation location, File debugFile) {
