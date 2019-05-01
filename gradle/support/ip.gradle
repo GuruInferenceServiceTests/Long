@@ -301,6 +301,7 @@ def Set<String> getAllowedIP(Project p) {
 	}
 	
 	set.add("GHIDRA")
+	set.add("Long")
 	set.add("LICENSE")
 	set.add("Copyright_Distribution_Permitted")
 	return set;
