@@ -50,6 +50,12 @@ task zipExtensions (type: Zip) {
 		into { getBaseProjectName(p) }
 	}
 	
+	from (p.file('build/os')) {
+		into { getBaseProjectName(p) + "/os" }
+		exclude "**/*.exp"
+		exclude "**/*.lib"
+	}
+	
 	/////////////////
 	// EXTERNAL LIBS
 	/////////////////
@@ -88,11 +94,14 @@ task zipExtensions (type: Zip) {
 		into { getBaseProjectName(p) + "/data" }
 	}
 	
+	from (p.projectDir.toString() + "/build/LICENSE.txt") {
+		into { getBaseProjectName(p) }
+	}
+	
 	/////////////////
 	// NATIVES
 	/////////////////		
-	project.OS_NAMES.each { platform ->
-															
+	project.OS_NAMES.each { platform ->													
 		from (p.projectDir.toString() + "/os/$platform") {
 			into  { getBaseProjectName(p) + "/os/$platform"	}
 		}
